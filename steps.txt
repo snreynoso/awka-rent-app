@@ -1,0 +1,5 @@
+npm init
+
+npm i dotenv express mongoose socket.io
+
+npm i -D nodemon @babel/core @babel/cli @babel/node @babel/preset-env // Para importar modulos en JS
