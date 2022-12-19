@@ -3,3 +3,5 @@ npm init
 npm i dotenv express mongoose socket.io
 
 npm i -D nodemon @babel/core @babel/cli @babel/node @babel/preset-env // Para importar modulos en JS
+
+https://www.youtube.com/watch?v=MYqpw0P31ms&t=1s&ab_channel=FaztCode
