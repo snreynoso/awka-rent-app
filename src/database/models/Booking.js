@@ -8,11 +8,11 @@ const schema = new Schema({
     quantity: {
         type: Number
     },
-    text: {
+    size: {
         type: String
     }
 }, {
     timestamps: true
 });
 
-export default model('Note', schema);
+export default model('Booking', schema);

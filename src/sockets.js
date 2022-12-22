@@ -1,45 +1,59 @@
-import Note from './database/models/Note';
+import Booking from './database/models/Booking';
+import Bike from './database/models/Bike';
 
 export default (io) => {
     io.on('connection', (socket) => {
 
-        const emitNotes = async () => {
-            const notes = await Note.find();
-
-            io.emit('server:loadnotes', notes)
+        const emitBookings = async () => {
+            const bookings = await Booking.find();
+            const qtyOfBikes = await Bike.find();
+            const data = {bookings, qtyOfBikes: qtyOfBikes[0].quantity};
+              
+            io.emit('server:loadbookings', data);
         };
-        emitNotes();
-
-        socket.on('client:newnote', async data => {
-            const newNote = new Note({
-                name: data.name,
-                quantity: data.quantity,
-                text: data.text
+        emitBookings();
+    
+        socket.on('client:newbooking', async bookingData => {
+            const newBooking = new Booking({
+                name: bookingData.name,
+                quantity: bookingData.quantity,
+                size: bookingData.size
             });
 
-            const savedNote = await newNote.save();
-            // socket.emit('server:newnote', savedNote);    // Socket solo re responderia a ese cocket cliente
-            io.emit('server:newnote', savedNote);       // io le reenvia a toodos los clientes!
+            const savedBooking = await newBooking.save();
+            // socket.emit('server:newbooking', savedBooking);    // Socket solo re responderia a ese cocket cliente
+            // io.emit('server:newbooking', savedBooking);       // io le reenvia a toodos los clientes!
+            
+            const qtyOfBikes = await Bike.find();
+            const data = {savedBooking, qtyOfBikes: qtyOfBikes[0].quantity};
+
+            io.emit('server:newbooking', data);      
         });
 
-        socket.on('client:deletenote', async (id) => {
-            await Note.findByIdAndDelete(id);
-            emitNotes();
+        socket.on('client:deletebooking', async (id) => {
+            await Booking.findByIdAndDelete(id);
+            emitBookings();
         });
 
-        socket.on('client:getnote', async (id) => {
-            const note = await Note.findById(id);
-            io.emit('server:selectednote', note);
+        socket.on('client:getbooking', async (id) => {
+            const booking = await Booking.findById(id);
+            io.emit('server:selectedbooking', booking);
         });
 
-        socket.on('client:updatenote', async (updatedNote) => {
-            await Note.findByIdAndUpdate(updatedNote._id, {
-                name: updatedNote.name,
-                quantity: updatedNote.quantity,
-                text: updatedNote.text
+        socket.on('client:updatebooking', async (updatedBooking) => {
+            await Booking.findByIdAndUpdate(updatedBooking._id, {
+                name: updatedBooking.name,
+                quantity: updatedBooking.quantity,
+                size: updatedBooking.size
             });
 
-            emitNotes();
+            emitBookings();
         });
+
+        const emitQtyOfBikes = async () => {
+            const qtyOfBikes = await Bike.find();
+            io.emit('server:loadqtyofbikes', qtyOfBikes[0].quantity);
+        };
+        emitQtyOfBikes();        
     });
 };
