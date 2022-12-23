@@ -1,4 +1,4 @@
-import { deleteBooking, getBookingById, saveBooking, updateBooking } from '../sockets/sockets.js';
+import { deleteBooking, getBookingById, saveBooking, updateBooking, updateFullStock } from '../sockets/sockets.js';
 
 const bookingsList = document.querySelector('#bookings');
 const name = document.querySelector('#name');
@@ -7,7 +7,7 @@ const size = document.querySelector('#size');
 
 let saveId = '';
 
-const bookingUI = (booking, qtyOfBikes) => {
+const bookingUI = booking => {
     const div = document.createElement('div')
     div.innerHTML = `
         <div class="row container rounded-2 border m-0 mt-1 p-2 d-flex justify-content-between">
@@ -16,11 +16,11 @@ const bookingUI = (booking, qtyOfBikes) => {
             </div>
             
             <div class="col-3">
-                <p>Qty: ${booking.quantity} of ${qtyOfBikes}</p>
+                <p>Qty: ${booking.quantity}</p>
             </div>
 
             <div class="col-3">
-                <p>${booking.size}</p>
+                <p>Size: ${booking.size}</p>
             </div>
             
             <div class="col-2">
@@ -39,13 +39,15 @@ const bookingUI = (booking, qtyOfBikes) => {
     return div;
 };
 
-export const renderBookings = data => {
-    const qtyOfBikes = data.qtyOfBikes;
-    const qtyInput = document.querySelector('#basic-addon2');
-    qtyInput.innerHTML = `of ${data.qtyOfBikes} available`;
+export const renderBookings = ({ bookings, avlStock, fullStock }) => {
+    const avlStockInput = document.querySelector('#basic-addon2');
+    avlStockInput.innerHTML = `of ${avlStock} available`;
+
+    const fullStockInput = document.querySelector('#fullStock');
+    fullStockInput.value = fullStock;
 
     bookingsList.innerHTML = '';
-    data.bookings.forEach(booking => bookingsList.append(bookingUI(booking, qtyOfBikes)));
+    bookings.forEach(booking => bookingsList.append(bookingUI(booking)));
 };
 
 export const onHandleSubmit = event => {
@@ -54,7 +56,6 @@ export const onHandleSubmit = event => {
     if (saveId) {
         updateBooking(saveId, name.value, quantity.value, size.value);
     } else {
-
         saveBooking(name.value, quantity.value, size.value);
     }
 
@@ -71,9 +72,14 @@ export const fillForm = booking => {
     saveId = booking._id;
 };
 
-export const appendBooking = data => {  
+export const appendBooking = data => {
     const qtyInput = document.querySelector('#basic-addon2');
-    qtyInput.innerHTML = `of ${data.qtyOfBikes} available`;
+    qtyInput.innerHTML = `of ${data.avlStock} available`;
 
-    bookingsList.append(bookingUI(data.savedBooking, data.qtyOfBikes));
+    bookingsList.append(bookingUI(data.savedBooking, data.avlStock));
 };
+
+export const onHandleFullStockUpdate = event => {
+    const qtyToUpdate = document.querySelector('#fullStock').value;
+    updateFullStock(qtyToUpdate);
+}

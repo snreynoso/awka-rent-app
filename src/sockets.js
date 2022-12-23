@@ -6,31 +6,45 @@ export default (io) => {
 
         const emitBookings = async () => {
             const bookings = await Booking.find();
-            const qtyOfBikes = await Bike.find();
-            const data = {bookings, qtyOfBikes: qtyOfBikes[0].quantity};
-              
+            const bikeData = await Bike.find();
+
+            const data = { bookings, avlStock: bikeData[0].avlStock, fullStock: bikeData[0].fullStock };
+
             io.emit('server:loadbookings', data);
         };
         emitBookings();
-    
+
         socket.on('client:newbooking', async bookingData => {
-            const newBooking = new Booking({
-                name: bookingData.name,
-                quantity: bookingData.quantity,
-                size: bookingData.size
-            });
+            // CHECK AVALAIBLE STOCK 
+            const bikeData = await Bike.find();
+            const newAvlStock = bikeData[0].avlStock - bookingData.quantity;
 
-            const savedBooking = await newBooking.save();
-            // socket.emit('server:newbooking', savedBooking);    // Socket solo re responderia a ese cocket cliente
-            // io.emit('server:newbooking', savedBooking);       // io le reenvia a toodos los clientes!
-            
-            const qtyOfBikes = await Bike.find();
-            const data = {savedBooking, qtyOfBikes: qtyOfBikes[0].quantity};
+            if (newAvlStock < 0) {
+                // REJECT BOOKING //
+                socket.emit('server:notenoughstock');
+                console.log('NOT ENOUGH BIKES TO RENT! ')
+            } else {
+                // SAVE NEW BOOKING IN DB //
+                const newBooking = new Booking({
+                    name: bookingData.name,
+                    quantity: bookingData.quantity,
+                    size: bookingData.size
+                });
 
-            io.emit('server:newbooking', data);      
+                const savedBooking = await newBooking.save();
+                const savedStock = await Bike.updateOne({ model: 'mountainbike' }, { avlStock: newAvlStock });
+                // TODO check if saved stock was Ok
+                io.emit('server:newbooking', { savedBooking, avlStock: newAvlStock });
+            }
         });
 
         socket.on('client:deletebooking', async (id) => {
+            const bookingToDelete = await Booking.findById(id);
+            const bikeData = await Bike.find();
+
+            const newAvlStock = bikeData[0].avlStock + bookingToDelete.quantity;
+            const updatedStock = await Bike.updateOne({ model: 'mountainbike' }, { avlStock: newAvlStock });
+
             await Booking.findByIdAndDelete(id);
             emitBookings();
         });
@@ -41,19 +55,49 @@ export default (io) => {
         });
 
         socket.on('client:updatebooking', async (updatedBooking) => {
-            await Booking.findByIdAndUpdate(updatedBooking._id, {
-                name: updatedBooking.name,
-                quantity: updatedBooking.quantity,
-                size: updatedBooking.size
-            });
+            // CHECK AVALAIBLE STOCK 
+            const bikeData = await Bike.find();
+            const prevQtyBooked = await Booking.findById(updatedBooking._id);
 
-            emitBookings();
+            const newAvlStock = bikeData[0].avlStock + prevQtyBooked.quantity - updatedBooking.quantity;
+
+            if (newAvlStock < 0) {
+                // REJECT BOOKING //
+                console.log('NOT ENOUGH BIKES TO RENT! ');
+                socket.emit('server:notenoughstock');
+            } else {
+                // UPDATE BOOKING IN DB //
+                await Booking.findByIdAndUpdate(updatedBooking._id, {
+                    name: updatedBooking.name,
+                    quantity: updatedBooking.quantity,
+                    size: updatedBooking.size
+                });
+
+                await Bike.updateOne({ model: 'mountainbike' }, { avlStock: newAvlStock });
+                emitBookings();
+            }
+
         });
 
         const emitQtyOfBikes = async () => {
-            const qtyOfBikes = await Bike.find();
-            io.emit('server:loadqtyofbikes', qtyOfBikes[0].quantity);
+            const dataBikes = await Bike.find();
+            io.emit('server:loadqtyofbikes', dataBikes[0].avlStock);
         };
-        emitQtyOfBikes();        
+        emitQtyOfBikes();
+
+        socket.on('client:updatefullstock', async (qtyToUpdate) => {
+            const dataBikes = await Bike.find();
+            const newAvlStock = dataBikes[0].avlStock - (dataBikes[0].fullStock - parseInt(qtyToUpdate));
+
+            await Bike.updateOne(
+                { model: 'mountainbike' },
+                {
+                    avlStock: newAvlStock,
+                    fullStock: qtyToUpdate
+                }
+            );
+
+            emitBookings();
+        });
     });
 };

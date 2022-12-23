@@ -22,7 +22,7 @@
         <p class="fs-3">Create / Edit</p>
 
         <form id="bookingForm" class="row g-3 align-items-center">
-            <div class="col-5">
+            <div class="col-4">
                 <div class="col-auto">
                     <label for="name" class="col-form-label">Name</label>
                 </div>
@@ -33,7 +33,7 @@
 
             <div class="col-3">
                 <div class="col-auto">
-                    <label for="quantity" class="col-form-label">Qty</label>
+                    <label for="avlStock" class="col-form-label">Qty</label>
                 </div>
 
                 <div class="col-auto input-group">
@@ -57,10 +57,23 @@
                 </div>
             </div>
 
-            <div class="col-1 align-self-end">
+            <div class="col-2 align-self-end">
                 <button class="btn btn-outline-success">Send</button>
             </div>
         </form>
+
+        <div class="row g-3 align-items-center mt-3">
+            <div class="col-3">
+                <div class="col-auto input-group">
+                    <input type="number" id="fullStock" value="1" min="1" max="50" class="form-control">
+                    <span class="input-group-text" id="basic-addon2">Full Stock of Bikes</span>
+                </div>
+            </div>
+
+            <div class="col-2 align-self-end">
+                <button id="btnFullStockUpdate" class="btn btn-outline-primary">Update</button>
+            </div>
+        </div>
     </div>
 
     <div class="container rounded-1 border p-3 mt-3">

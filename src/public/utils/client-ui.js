@@ -19,11 +19,7 @@ export const onHandleSubmit = event => {
     size.value = '';
 };
 
-export const appendBooking = data => {  
-
-    console.log('From appendBooking Client: ' +  data)
-    // const qtyInput = document.querySelector('#basic-addon2');
-    // qtyInput.innerHTML = `of ${data.qtyOfBikes} available`;
-
-    // bookingsList.append(bookingUI(data.savedBooking, data.qtyOfBikes));
+export const updateStock = data => {
+    const qtyInput = document.querySelector('#basic-addon2');
+    qtyInput.innerHTML = `of ${data.avlStock} available`;
 };

@@ -40,3 +40,13 @@ export const updateBooking = (id, name, quantity, size) => {
 export const loadQtyOfBikes = callback => {
     socket.on('server:loadqtyofbikes', callback);
 };
+
+export const updateFullStock = qtyToUpdate => {
+    socket.emit('client:updatefullstock', qtyToUpdate);
+};
+
+
+socket.on('server:notenoughstock', () => {
+    console.log('NOT ENOUGH BIKES TO RENT!');
+    alert('NOT ENOUGH BIKES TO RENT!');
+});
