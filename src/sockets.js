@@ -14,6 +14,12 @@ export default (io) => {
         };
         emitBookings();
 
+        const emitQtyOfBikes = async () => {
+            const dataBikes = await Bike.find();
+            io.emit('server:loadqtyofbikes', dataBikes[0].avlStock);
+        };
+        emitQtyOfBikes();
+
         socket.on('client:newbooking', async bookingData => {
             // CHECK AVALAIBLE STOCK 
             const bikeData = await Bike.find();
@@ -52,7 +58,8 @@ export default (io) => {
 
         socket.on('client:getbooking', async (id) => {
             const booking = await Booking.findById(id);
-            io.emit('server:selectedbooking', booking);
+            // io.emit('server:selectedbooking', booking);
+            socket.emit('server:selectedbooking', booking);
         });
 
         socket.on('client:updatebooking', async (updatedBooking) => {
@@ -80,12 +87,6 @@ export default (io) => {
             }
 
         });
-
-        const emitQtyOfBikes = async () => {
-            const dataBikes = await Bike.find();
-            io.emit('server:loadqtyofbikes', dataBikes[0].avlStock);
-        };
-        emitQtyOfBikes();
 
         socket.on('client:updatefullstock', async (qtyToUpdate) => {
             const dataBikes = await Bike.find();
