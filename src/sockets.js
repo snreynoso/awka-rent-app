@@ -75,6 +75,7 @@ export default (io) => {
 
                 await Bike.updateOne({ model: 'mountainbike' }, { avlStock: newAvlStock });
                 emitBookings();
+                emitQtyOfBikes();
             }
 
         });
@@ -98,6 +99,7 @@ export default (io) => {
             );
 
             emitBookings();
+            emitQtyOfBikes();
         });
     });
 };

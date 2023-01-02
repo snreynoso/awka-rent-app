@@ -10,22 +10,24 @@ let saveId = '';
 const bookingUI = booking => {
     const div = document.createElement('div')
     div.innerHTML = `
-        <div class="row container rounded-2 border m-0 mt-1 p-2 d-flex justify-content-between">
-            <div class="col-4">
+        <div class="row container rounded-2 border m-0 mt-1 p-2 d-flex justify-content-evenly">
+            <div class="col-md-4">
                 <p>Name: ${booking.name}</p>
             </div>
             
-            <div class="col-3">
+            <div class="col-md-2">
                 <p>Qty: ${booking.quantity}</p>
             </div>
 
-            <div class="col-3">
+            <div class="col-md-2">
                 <p>Size: ${booking.size}</p>
             </div>
             
-            <div class="col-2">
-                <button class="update btn btn-primary" data-id="${booking._id}">Update</button>
-                <button class="delete btn btn-danger" data-id="${booking._id}">Delete</button>
+            <div class="col-md-4 ">
+                <div class="d-flex justify-content-md-evenly">
+                    <button class="update btn btn-primary" data-id="${booking._id}">Update</button>
+                    <button class="delete btn btn-danger ms-2" data-id="${booking._id}">Delete</button>
+                </div>
             </div>
         </div>
     `;
