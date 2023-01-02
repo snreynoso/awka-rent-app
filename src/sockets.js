@@ -47,6 +47,7 @@ export default (io) => {
 
             await Booking.findByIdAndDelete(id);
             emitBookings();
+            emitQtyOfBikes();
         });
 
         socket.on('client:getbooking', async (id) => {
