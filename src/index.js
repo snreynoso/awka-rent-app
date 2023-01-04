@@ -30,8 +30,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
-app.use('/auth' , require('./routes/auth'));
-app.use('/bikes', require('./routes/bikes'));
+app.use('/api/user' , require('./routes/user'));
+app.use('/api/login', require('./routes/login'));
+app.use('/bikes'    , require('./routes/bikes'));
 
 
 //-- CONNECTING Express HTTP Server WITH Socket IO Server --//
