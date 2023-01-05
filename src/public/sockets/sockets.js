@@ -4,11 +4,12 @@ export const loadBookings = callback => {
     socket.on('server:loadbookings', callback);
 };
 
-export const saveBooking = (name, quantity, size) => {
+export const saveBooking = (name, quantity, size, date) => {
     socket.emit('client:newbooking', {
         name,
         quantity,
-        size
+        size,
+        date
     });
 };
 
@@ -28,12 +29,13 @@ export const onSelected = callback => {
     socket.on('server:selectedbooking', callback);
 };
 
-export const updateBooking = (id, name, quantity, size) => {
+export const updateBooking = (id, name, quantity, size, date) => {
     socket.emit('client:updatebooking', {
         _id: id,
         name,
         quantity,
-        size
+        size,
+        date
     })
 };
 

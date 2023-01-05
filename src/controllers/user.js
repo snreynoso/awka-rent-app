@@ -12,25 +12,92 @@ const createUser = async (req, res) => {
         });
     }
 
-    // TODO Check if user with same email already exits
+    const userEmail = req.body.email;
+    const checkUser = await User.exists({email: userEmail});
+
+    if (checkUser) {
+        return res.status(400).json({
+            status: 400,
+            msg: 'User with that email has already registered'
+        });
+    }
 
     const { name, email, password, role } = req.body;
     const encryptedPassword = encryptPassword(password);
     const newUser = new User({ name, email, password: encryptedPassword, role });
-    const savedUser = await newUser.save();
+    const createdUser = await newUser.save();
 
     return res.status(200).json({
         status: 200,
-        msg: 'User created!'
+        msg: `User ${createdUser.name} was created`
     });
 };
 
-// TODO READ Controller
+const getAllUsers = async (req, res) => {
 
-// TODO UPDATE Controller
+    const { userRole } = req.payloadToken;
 
-// TODO DELETE Controller
+    if (userRole !== 0) {
+        return res.status(401).json({
+            status: 401,
+            msg: 'Unauthorized user...'
+        });
+    }
+
+    const allUsers = await User.find().select('id name email role');
+
+    return res.status(200).json({
+        status: 200,
+        allUsers
+    });
+};
+
+const getUserById = async (req, res) => {
+
+    const { userRole } = req.payloadToken;
+
+    if (userRole !== 0) {
+        return res.status(401).json({
+            status: 401,
+            msg: 'Unauthorized user...'
+        });
+    }
+
+    const userId = req.body.id;
+    const user = await User.findById(userId).select('id name email role');
+
+    return res.status(200).json({
+        status: 200,
+        user
+    });
+};
+
+// TODO UPDATE User Controller
+
+const deleteUser = async (req, res) => {
+
+    const { userRole } = req.payloadToken;
+
+    if (userRole !== 0) {
+        return res.status(401).json({
+            status: 401,
+            msg: 'Unauthorized user...'
+        });
+    }
+
+    const userId = req.body.id;
+    const userDeleted = await User.findByIdAndDelete(userId).select('name');
+
+    return res.status(200).json({
+        status: 200,
+        msg: `User ${userDeleted.name} was deleted`
+    });
+}
 
 module.exports = {
-    createUser
+    createUser,
+    getAllUsers,
+    getUserById,
+    // updateUser,
+    deleteUser
 }

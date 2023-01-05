@@ -3,8 +3,6 @@ const btnLogIn = document.querySelector('#logInSubmit');
 // var url = (window.location.hostname.includes('localhost'))
 //     ? 'http://localhost:3000/'
 //     : 'https://restserver-curso-fher.herokuapp.com/api/auth/google';
-
-
 var url = 'http://localhost:3000/api/login';
 
 btnLogIn.addEventListener('submit', (event) => {
@@ -28,6 +26,7 @@ btnLogIn.addEventListener('submit', (event) => {
         .then(data => {
             if (data.status === 200) {
                 sessionStorage.token = data.token;
+                sessionStorage.role  = data.role;
                 window.location.href = './admin.html';
             } else if (data.status === 400) {
                 alert('Invalid email and/or password');

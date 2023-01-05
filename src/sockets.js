@@ -34,7 +34,8 @@ export default (io) => {
                 const newBooking = new Booking({
                     name: bookingData.name,
                     quantity: bookingData.quantity,
-                    size: bookingData.size
+                    size: bookingData.size,
+                    date: bookingData.date
                 });
 
                 const savedBooking = await newBooking.save();
@@ -76,9 +77,10 @@ export default (io) => {
             } else {
                 // UPDATE BOOKING IN DB //
                 await Booking.findByIdAndUpdate(updatedBooking._id, {
-                    name: updatedBooking.name,
+                    name:     updatedBooking.name,
                     quantity: updatedBooking.quantity,
-                    size: updatedBooking.size
+                    size:     updatedBooking.size,
+                    date:     updatedBooking.date
                 });
 
                 await Bike.updateOne({ model: 'mountainbike' }, { avlStock: newAvlStock });

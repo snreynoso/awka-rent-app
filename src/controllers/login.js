@@ -32,7 +32,8 @@ const loginController = async (req, res) => {
         
         return res.status(200).json({
             status: 200,
-            token
+            role: user.role,
+            token            
         });
 
     } catch (error) {

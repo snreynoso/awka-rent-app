@@ -6,10 +6,16 @@ const schema = new Schema({
         required: true
     },
     quantity: {
-        type: Number
+        type: Number,
+        required: true
     },
     size: {
-        type: String
+        type: String,
+        required: true
+    },
+    date: {
+        type: Date,
+        required: true
     }
 }, {
     timestamps: true
