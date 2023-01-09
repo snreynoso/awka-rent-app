@@ -1,10 +1,10 @@
 const btnLogIn = document.querySelector('#logInSubmit');
 
-// var url = (window.location.hostname.includes('localhost'))
-//     ? 'http://localhost:3000/'
-//     : 'https://restserver-curso-fher.herokuapp.com/api/auth/google';
+var url = (window.location.hostname.includes('localhost'))
+    ? 'http://localhost:3000/api/login'
+    : 'https://awka-rent-app-production.up.railway.app/api/login';
 
-var URL_Login = 'http://localhost:3000/api/login';
+// var URL_Login = 'http://localhost:3000/api/login';
 
 btnLogIn.addEventListener('submit', (event) => {
     event.preventDefault();
