@@ -8,10 +8,20 @@
     }
 })();
 
-const URL_GetAllUsers = 'http://localhost:3000/api/user/get-all';
-const URL_GetUserById = 'http://localhost:3000/api/user/get';
-const URL_CreateUser = 'http://localhost:3000/api/user/create';
-const URL_DeleteUser = 'http://localhost:3000/api/user/delete';
+// var url = (window.location.hostname.includes('localhost'))
+//     ? 'http://localhost:3000/api/login'
+//     : 'https://awka-rent-app-production.up.railway.app/api/login';
+
+
+// const URL_GetAllUsers = 'http://localhost:3000/api/user/get-all';
+// const URL_GetUserById = 'http://localhost:3000/api/user/get';
+// const URL_CreateUser = 'http://localhost:3000/api/user/create';
+// const URL_DeleteUser = 'http://localhost:3000/api/user/delete';
+
+const URL_GetAllUsers = ' https://awka-rent-app-production.up.railway.app/api/user/get-all';
+const URL_GetUserById = ' https://awka-rent-app-production.up.railway.app/api/user/get';
+const URL_CreateUser  = ' https://awka-rent-app-production.up.railway.app/api/user/create';
+const URL_DeleteUser  = ' https://awka-rent-app-production.up.railway.app/api/user/delete';
 
 const usersList = document.querySelector('#users');
 const userForm = document.querySelector('#userForm');
