@@ -47,7 +47,6 @@ export const updateFullStock = qtyToUpdate => {
     socket.emit('client:updatefullstock', qtyToUpdate);
 };
 
-
 socket.on('server:notenoughstock', () => {
     console.log('NOT ENOUGH BIKES TO RENT!');
     alert('NOT ENOUGH BIKES TO RENT!');

@@ -10,9 +10,9 @@ let saveId = '';
 
 const bookingUI = booking => {
 
-    const formatDate = booking.date.slice(0, 10)
+    const formatDate = booking.date.slice(0, 10);
+    const div = document.createElement('div');
 
-    const div = document.createElement('div')
     div.innerHTML = `
         <div class="row container rounded-2 border m-0 mt-1 p-2 d-flex justify-content-evenly">
             <div class="col-md-2">

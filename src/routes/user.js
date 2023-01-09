@@ -13,7 +13,7 @@ const router = Router();
 
 router.post('/create'  , userValidator, validateJWT, createUser);
 router.get('/get-all'  , validateJWT, getAllUsers);
-router.get('/get'      , validateJWT, getUserById);
+router.post('/get'     , validateJWT, getUserById);
 // router.post('/update' , userValidator, validateJWT, updateUser);
 router.delete('/delete', validateJWT, deleteUser);
 

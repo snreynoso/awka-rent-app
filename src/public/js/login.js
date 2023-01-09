@@ -3,7 +3,8 @@ const btnLogIn = document.querySelector('#logInSubmit');
 // var url = (window.location.hostname.includes('localhost'))
 //     ? 'http://localhost:3000/'
 //     : 'https://restserver-curso-fher.herokuapp.com/api/auth/google';
-var url = 'http://localhost:3000/api/login';
+
+var URL_Login = 'http://localhost:3000/api/login';
 
 btnLogIn.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -17,7 +18,7 @@ btnLogIn.addEventListener('submit', (event) => {
 
     const [email, password] = formValues;
 
-    fetch(url, {
+    fetch(URL_Login, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
