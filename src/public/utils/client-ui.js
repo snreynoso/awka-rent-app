@@ -1,8 +1,9 @@
 import { saveBooking } from '../sockets/sockets.js';
 
-const name = document.querySelector('#name');
+const name     = document.querySelector('#name');
 const quantity = document.querySelector('#quantity');
-const size = document.querySelector('#size');
+const size     = document.querySelector('#size');
+const date     = document.querySelector('#date');
 
 export const renderQtyOfBikes = qtyOfBikes => {
     const qtyInput = document.querySelector('#basic-addon2');
@@ -12,11 +13,12 @@ export const renderQtyOfBikes = qtyOfBikes => {
 export const onHandleSubmit = event => {
     event.preventDefault();
     
-    saveBooking(name.value, quantity.value, size.value);
+    saveBooking(name.value, quantity.value, size.value, date.value);
 
-    name.value = '';
+    name.value     = '';
     quantity.value = '';
-    size.value = '';
+    size.value     = '';
+    date.value     = '';
 };
 
 export const updateStock = data => {

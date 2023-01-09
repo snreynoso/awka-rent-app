@@ -14,6 +14,12 @@ export default (io) => {
         };
         emitBookings();
 
+        const emitQtyOfBikes = async () => {
+            const dataBikes = await Bike.find();
+            io.emit('server:loadqtyofbikes', dataBikes[0].avlStock);
+        };
+        emitQtyOfBikes();
+
         socket.on('client:newbooking', async bookingData => {
             // CHECK AVALAIBLE STOCK 
             const bikeData = await Bike.find();
@@ -28,7 +34,8 @@ export default (io) => {
                 const newBooking = new Booking({
                     name: bookingData.name,
                     quantity: bookingData.quantity,
-                    size: bookingData.size
+                    size: bookingData.size,
+                    date: bookingData.date
                 });
 
                 const savedBooking = await newBooking.save();
@@ -52,7 +59,8 @@ export default (io) => {
 
         socket.on('client:getbooking', async (id) => {
             const booking = await Booking.findById(id);
-            io.emit('server:selectedbooking', booking);
+            // io.emit('server:selectedbooking', booking);
+            socket.emit('server:selectedbooking', booking);
         });
 
         socket.on('client:updatebooking', async (updatedBooking) => {
@@ -69,9 +77,10 @@ export default (io) => {
             } else {
                 // UPDATE BOOKING IN DB //
                 await Booking.findByIdAndUpdate(updatedBooking._id, {
-                    name: updatedBooking.name,
+                    name:     updatedBooking.name,
                     quantity: updatedBooking.quantity,
-                    size: updatedBooking.size
+                    size:     updatedBooking.size,
+                    date:     updatedBooking.date
                 });
 
                 await Bike.updateOne({ model: 'mountainbike' }, { avlStock: newAvlStock });
@@ -80,12 +89,6 @@ export default (io) => {
             }
 
         });
-
-        const emitQtyOfBikes = async () => {
-            const dataBikes = await Bike.find();
-            io.emit('server:loadqtyofbikes', dataBikes[0].avlStock);
-        };
-        emitQtyOfBikes();
 
         socket.on('client:updatefullstock', async (qtyToUpdate) => {
             const dataBikes = await Bike.find();

@@ -7,14 +7,16 @@ import cors from 'cors';
 import { Server as WebsocketServer } from 'socket.io';
 import http from 'http';
 import sockets from "./sockets";
-import { connect } from "mongoose";
+import { connect, mongoose } from "mongoose";
 
 
 //-- CONNECTING MONGO DB --//
+mongoose.set("strictQuery", false);
+
 const connectDB = async () => {
     try {
         await connect(MONGODB_URI);
-        console.log('>>> DB Connected <<<');
+        console.log('>>> ------ DB Connected ------- <<<');
     } catch (error) {
         console.log(error)
     }
@@ -30,8 +32,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Routes
-app.use('/auth' , require('./routes/auth'));
-app.use('/bikes', require('./routes/bikes'));
+app.use('/api/user' , require('./routes/user'));
+app.use('/api/login', require('./routes/login'));
+app.use('/bikes'    , require('./routes/bikes'));
 
 
 //-- CONNECTING Express HTTP Server WITH Socket IO Server --//
@@ -39,4 +42,4 @@ const server = http.createServer(app); // App is send to Websocket as a Server
 const httpServer = server.listen(PORT);
 const io = new WebsocketServer(httpServer);
 sockets(io);
-console.log('Server running on port ' + PORT);
+console.log('>>> Server running on port ' + PORT + ' <<<');

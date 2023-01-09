@@ -5,20 +5,20 @@ const schema = new Schema({
         type: String,
         required: true
     },
-    quantity: {
-        type: Number,
-        required: true
-    },
-    size: {
+    email: {
         type: String,
         required: true
     },
-    date: {
-        type: Date,
+    password: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: Number,
         required: true
     }
 }, {
     timestamps: true
 });
 
-export default model('Booking', schema);
+export default model('User', schema);
