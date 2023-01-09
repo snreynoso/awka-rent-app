@@ -1,3 +1,4 @@
+import { urlSelector } from "../utils/url-selector.js";
 
 (() => {
     let role = sessionStorage.getItem('role');
@@ -11,17 +12,19 @@
 // var url = (window.location.hostname.includes('localhost'))
 //     ? 'http://localhost:3000/api/login'
 //     : 'https://awka-rent-app-production.up.railway.app/api/login';
-
-
 // const URL_GetAllUsers = 'http://localhost:3000/api/user/get-all';
 // const URL_GetUserById = 'http://localhost:3000/api/user/get';
-// const URL_CreateUser = 'http://localhost:3000/api/user/create';
-// const URL_DeleteUser = 'http://localhost:3000/api/user/delete';
+// const URL_CreateUser  = 'http://localhost:3000/api/user/create';
+// const URL_DeleteUser  = 'http://localhost:3000/api/user/delete';
+// const URL_GetAllUsers = 'https://awka-rent-app-production.up.railway.app/api/user/get-all';
+// const URL_GetUserById = 'https://awka-rent-app-production.up.railway.app/api/user/get';
+// const URL_CreateUser  = 'https://awka-rent-app-production.up.railway.app/api/user/create';
+// const URL_DeleteUser  = 'https://awka-rent-app-production.up.railway.app/api/user/delete';
 
-const URL_GetAllUsers = ' https://awka-rent-app-production.up.railway.app/api/user/get-all';
-const URL_GetUserById = ' https://awka-rent-app-production.up.railway.app/api/user/get';
-const URL_CreateUser  = ' https://awka-rent-app-production.up.railway.app/api/user/create';
-const URL_DeleteUser  = ' https://awka-rent-app-production.up.railway.app/api/user/delete';
+const URL_GetAllUsers = urlSelector('/api/user/get-all');
+const URL_GetUserById = urlSelector('/api/user/get');
+const URL_CreateUser  = urlSelector('/api/user/create');
+const URL_DeleteUser  = urlSelector('/api/user/delete');
 
 const usersList = document.querySelector('#users');
 const userForm = document.querySelector('#userForm');
@@ -42,7 +45,8 @@ const getUsergById = userId => {
     })
         .then(res => res.json())
         .then(data => {
-            console.log(data)
+            console.log(data);
+
         })
         .catch(error => console.log(error));
 };
@@ -58,7 +62,7 @@ const deleteUser = userId => {
     })
         .then(res => res.json())
         .then(data => {
-            console.log(data)
+            console.log(data);
         })
         .catch(error => console.log(error));
 
@@ -133,7 +137,6 @@ const renderUsers = () => {
 renderUsers();
 
 const createUser = (user) => {
-    console.log(user)
 
     fetch(URL_CreateUser, {
         method: 'POST',
@@ -145,10 +148,10 @@ const createUser = (user) => {
     })
         .then(res => res.json())
         .then(data => {
-            if(data.status === 400) {
+            if (data.status === 400) {
                 alert(data.msg);
             }
-            console.log(data)
+            console.log(data);
         })
         .catch(error => console.log(error));
 };
@@ -156,7 +159,7 @@ const createUser = (user) => {
 const onHandleSubmit = event => {
     event.preventDefault();
 
-    user = {
+    const user = {
         name: user_name.value,
         email: email.value,
         password: password.value,
