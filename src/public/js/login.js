@@ -1,6 +1,6 @@
 const btnLogIn = document.querySelector('#logInSubmit');
 
-var url = (window.location.hostname.includes('localhost'))
+var URL_Login = (window.location.hostname.includes('localhost'))
     ? 'http://localhost:3000/api/login'
     : 'https://awka-rent-app-production.up.railway.app/api/login';
 
