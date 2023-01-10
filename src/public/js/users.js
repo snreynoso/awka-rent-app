@@ -9,22 +9,11 @@ import { urlSelector } from "../utils/url-selector.js";
     }
 })();
 
-// var url = (window.location.hostname.includes('localhost'))
-//     ? 'http://localhost:3000/api/login'
-//     : 'https://awka-rent-app-production.up.railway.app/api/login';
-// const URL_GetAllUsers = 'http://localhost:3000/api/user/get-all';
-// const URL_GetUserById = 'http://localhost:3000/api/user/get';
-// const URL_CreateUser  = 'http://localhost:3000/api/user/create';
-// const URL_DeleteUser  = 'http://localhost:3000/api/user/delete';
-// const URL_GetAllUsers = 'https://awka-rent-app-production.up.railway.app/api/user/get-all';
-// const URL_GetUserById = 'https://awka-rent-app-production.up.railway.app/api/user/get';
-// const URL_CreateUser  = 'https://awka-rent-app-production.up.railway.app/api/user/create';
-// const URL_DeleteUser  = 'https://awka-rent-app-production.up.railway.app/api/user/delete';
-
 const URL_GetAllUsers = urlSelector('/api/user/get-all');
 const URL_GetUserById = urlSelector('/api/user/get');
-const URL_CreateUser  = urlSelector('/api/user/create');
-const URL_DeleteUser  = urlSelector('/api/user/delete');
+const URL_CreateUser = urlSelector('/api/user/create');
+const URL_DeleteUser = urlSelector('/api/user/delete');
+const URL_UpdateUser = urlSelector('/api/user/update');
 
 const usersList = document.querySelector('#users');
 const userForm = document.querySelector('#userForm');
@@ -33,6 +22,8 @@ const user_name = document.querySelector('#name');
 const email = document.querySelector('#email');
 const password = document.querySelector('#password');
 const role = document.querySelector('#role');
+
+let saveId = '';
 
 const getUsergById = userId => {
     fetch(URL_GetUserById, {
@@ -45,8 +36,10 @@ const getUsergById = userId => {
     })
         .then(res => res.json())
         .then(data => {
-            console.log(data);
-
+            user_name.value = data.user.name;
+            email.value = data.user.email;
+            role.value = data.user.role;
+            saveId = data.user._id;
         })
         .catch(error => console.log(error));
 };
@@ -63,6 +56,7 @@ const deleteUser = userId => {
         .then(res => res.json())
         .then(data => {
             console.log(data);
+            alert(data.msg);
         })
         .catch(error => console.log(error));
 
@@ -136,8 +130,35 @@ const renderUsers = () => {
 };
 renderUsers();
 
-const createUser = (user) => {
+const updateUser = (id, fieldsToUpdate) => {
 
+    const userToUpdate = {
+        "user": {
+            "_id": id,
+            "fieldsToUpdate": fieldsToUpdate
+        }
+    }
+
+    fetch(URL_UpdateUser, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': sessionStorage.token
+        },
+        body: JSON.stringify(userToUpdate)
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 400) {
+                alert(data.msg);
+            }
+            console.log(data);
+            alert(data.msg);
+        })
+        .catch(error => console.log(error));
+};
+
+const createUser = (user) => {
     fetch(URL_CreateUser, {
         method: 'POST',
         headers: {
@@ -152,6 +173,7 @@ const createUser = (user) => {
                 alert(data.msg);
             }
             console.log(data);
+            alert(data.msg);
         })
         .catch(error => console.log(error));
 };
@@ -166,12 +188,11 @@ const onHandleSubmit = event => {
         role: role.value
     };
 
-    // TODO Update user
-    //if (saveId) {
-    //    updateBooking(saveId, name.value, quantity.value, size.value, date.value.slice(0, 10));
-    //} else {
-    createUser(user);
-    //}
+    if (saveId) {
+        updateUser(saveId, user);
+    } else {
+        createUser(user);
+    }
 
     user_name.value = '';
     email.value = '';

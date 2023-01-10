@@ -1,10 +1,14 @@
+import { urlSelector } from "../utils/url-selector.js";
+
 const btnLogIn = document.querySelector('#logInSubmit');
 
-var URL_Login = (window.location.hostname.includes('localhost'))
-    ? 'http://localhost:3000/api/login'
-    : 'https://awka-rent-app-production.up.railway.app/api/login';
+// var URL_Login = (window.location.hostname.includes('localhost'))
+//     ? 'http://localhost:3000/api/login'
+//     : 'https://awka-rent-app-production.up.railway.app/api/login';
 
 // var URL_Login = 'http://localhost:3000/api/login';
+
+const URL_Login = urlSelector('/api/login');
 
 btnLogIn.addEventListener('submit', (event) => {
     event.preventDefault();

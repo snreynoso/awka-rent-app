@@ -11,6 +11,11 @@ const userValidator = [
     validateFields
 ];
 
+const userUpdateValidator = [
+    check('user', 'User data is empty').not().isEmpty()
+];
+
 module.exports = {
-    userValidator
+    userValidator,
+    userUpdateValidator
 }

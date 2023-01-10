@@ -13,7 +13,7 @@ const createUser = async (req, res) => {
     }
 
     const userEmail = req.body.email;
-    const checkUser = await User.exists({email: userEmail});
+    const checkUser = await User.exists({ email: userEmail });
 
     if (checkUser) {
         return res.status(400).json({
@@ -72,7 +72,35 @@ const getUserById = async (req, res) => {
     });
 };
 
-// TODO UPDATE User Controller
+const updateUser = async (req, res) => {
+
+    const { userRole } = req.payloadToken;
+
+    if (userRole !== 0) {
+        return res.status(401).json({
+            status: 401,
+            msg: 'Unauthorized user...'
+        });
+    }
+
+    const user = req.body.user;
+    const filter = { _id: user._id };
+    let update = user.fieldsToUpdate;
+
+    if(update.password) {
+        const encryptedPassword = encryptPassword(update.password);
+        update.password = encryptedPassword;
+    }
+
+    const updatedUser = await User.findOneAndUpdate(filter, update, { new: true }).select('name');
+
+    console.log(updatedUser)
+
+    return res.status(200).json({
+        status: 200,
+        msg: `User ${updatedUser.name} updated!`
+    });
+};
 
 const deleteUser = async (req, res) => {
 
@@ -98,6 +126,6 @@ module.exports = {
     createUser,
     getAllUsers,
     getUserById,
-    // updateUser,
+    updateUser,
     deleteUser
 }
