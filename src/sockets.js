@@ -1,5 +1,6 @@
 import Booking from './database/models/Booking';
 import Bike from './database/models/Bike';
+import { getStockByDate } from './utils/getStockByDate';
 
 export default (io) => {
     io.on('connection', (socket) => {
@@ -14,34 +15,34 @@ export default (io) => {
         };
         emitBookings();
 
-        const emitQtyOfBikes = async () => {
-            const dataBikes = await Bike.find();
-            io.emit('server:loadqtyofbikes', dataBikes[0].avlStock);
-        };
-        emitQtyOfBikes();
+        // const emitQtyOfBikes = async () => {
+        //     const filter = 'smallFullStock smallAvlStock mediumFullStock mediumAvlStock largeFullStock largeAvlStock';
+        //     const qtyOfBikes = await Bike.find().select(filter);
+        //     io.emit('server:loadqtyofbikes', qtyOfBikes[0]);
+        // };
+        // emitQtyOfBikes();
 
-        socket.on('client:newbooking', async bookingData => {
-            // CHECK AVALAIBLE STOCK 
-            const bikeData = await Bike.find();
-            const newAvlStock = bikeData[0].avlStock - bookingData.quantity;
+        socket.on('client:newbooking', async (bookingData) => {           
+            const stockByDate = await getStockByDate(bookingData.date);
 
-            if (newAvlStock < 0) {
+            const smallCheckStock  = stockByDate.smallStock  - bookingData.smallQty;
+            const mediumCheckStock = stockByDate.mediumStock - bookingData.mediumQty;
+            const largeCheckStock  = stockByDate.largeStock  - bookingData.largeQty;
+
+            if (smallCheckStock < 0 || mediumCheckStock < 0 || largeCheckStock < 0) {
                 // REJECT BOOKING //
                 socket.emit('server:notenoughstock');
                 console.log('NOT ENOUGH BIKES TO RENT! ')
             } else {
                 // SAVE NEW BOOKING IN DB //
-                const newBooking = new Booking({
-                    name: bookingData.name,
-                    quantity: bookingData.quantity,
-                    size: bookingData.size,
-                    date: bookingData.date
-                });
-
+                const newBooking = new Booking(bookingData);
                 const savedBooking = await newBooking.save();
-                const savedStock = await Bike.updateOne({ model: 'mountainbike' }, { avlStock: newAvlStock });
+                
                 // TODO check if saved stock was Ok
-                io.emit('server:newbooking', { savedBooking, avlStock: newAvlStock });
+
+                io.emit('server:newbooking', { savedBooking });
+
+                // TODO CONTINUAR DESDE ACA PARA ACTUALIZAR PANEL ADMIN
             }
         });
 
@@ -54,7 +55,7 @@ export default (io) => {
 
             await Booking.findByIdAndDelete(id);
             emitBookings();
-            emitQtyOfBikes();
+            // emitQtyOfBikes();
         });
 
         socket.on('client:getbooking', async (id) => {
@@ -85,9 +86,8 @@ export default (io) => {
 
                 await Bike.updateOne({ model: 'mountainbike' }, { avlStock: newAvlStock });
                 emitBookings();
-                emitQtyOfBikes();
+                // emitQtyOfBikes();
             }
-
         });
 
         socket.on('client:updatefullstock', async (qtyToUpdate) => {
@@ -103,7 +103,12 @@ export default (io) => {
             );
 
             emitBookings();
-            emitQtyOfBikes();
+            // emitQtyOfBikes();
+        });
+
+        socket.on('client:dateselected', async (date) => {
+            const stockByDate = await getStockByDate(date);
+            socket.emit('server:stockbydate', stockByDate);
         });
     });
 };

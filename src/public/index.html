@@ -22,8 +22,9 @@
         <p class="fs-3">Make a booking</p>
 
         <form id="bookingForm" class="">
+
             <div class="row g-3 align-items-center">
-                <div class="col-md-5">
+                <div class="col-md-8">
                     <div class="col-auto">
                         <label for="name" class="col-form-label">Name</label>
                     </div>
@@ -31,41 +32,33 @@
                         <input type="text" id="name" class="form-control">
                     </div>
                 </div>
-
+            
                 <div class="col-md-4">
-                    <div class="col-auto">
-                        <label for="quantity" class="col-form-label">Qty</label>
-                    </div>
-
-                    <div class="col-auto input-group">
-                        <input type="number" id="quantity" value="1" min="1" max="10" class="form-control">
-                        <span class="input-group-text" id="basic-addon2">of -- available</span>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="col-auto">
-                        <label for="size" class="col-form-label">Size</label>
-                    </div>
-
-                    <div class="col-auto">
-                        <select id="size" class="form-select">
-                            <option selected>Choose...</option>
-                            <option value="Small">Small</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Large">Large</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row g-3 align-items-center">
-                <div class="col-md-5">
                     <div class="col-auto">
                         <label for="date" class="col-form-label">Date</label>
                     </div>
                     <div class="col-auto">
                         <input type="date" id="date" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <div class="col-auto">
+                        <label class="col-form-label">Quantity</label>
+                    </div>
+                    <div class="col-auto input-group mt-1">
+                        <input type="number" id="s-qty" value="0" min="0" max="10" class="form-control">
+                        <span class="input-group-text" id="s-qty-addon">-- available SMALL Size</span>
+                    </div>
+                    <div class="col-auto input-group mt-1">
+                        <input type="number" id="m-qty" value="0" min="0" max="10" class="form-control">
+                        <span class="input-group-text" id="m-qty-addon">-- available MEDIUM Size</span>
+                    </div>
+                    <div class="col-auto input-group mt-1">
+                        <input type="number" id="l-qty" value="0" min="0" max="10" class="form-control">
+                        <span class="input-group-text" id="l-qty-addon">-- available LARGE Size</span>
                     </div>
                 </div>
             </div>
@@ -77,7 +70,7 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/sockets/client-socket.js" type="module"></script>
+    <script src="./sockets/client-socket.js" type="module"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"

@@ -10,4 +10,3 @@ bookingForm.addEventListener('submit', onHandleSubmit);
 
 const btnFullStockUpdate = document.querySelector('#btnFullStockUpdate');
 btnFullStockUpdate.addEventListener('click', onHandleFullStockUpdate);
-

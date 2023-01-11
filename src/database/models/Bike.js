@@ -5,10 +5,22 @@ const schema = new Schema({
         type: String,
         required: true
     },
-    fullStock: {
+    smallFullStock: {
         type: Number
     },
-    avlStock: {
+    smallAvlStock: {
+        type: Number
+    },
+    mediumFullStock: {
+        type: Number
+    },
+    mediumAvlStock: {
+        type: Number
+    },
+    largeFullStock: {
+        type: Number
+    },
+    largeAvlStock: {
         type: Number
     },
     description: {

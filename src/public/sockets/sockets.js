@@ -4,13 +4,8 @@ export const loadBookings = callback => {
     socket.on('server:loadbookings', callback);
 };
 
-export const saveBooking = (name, quantity, size, date) => {
-    socket.emit('client:newbooking', {
-        name,
-        quantity,
-        size,
-        date
-    });
+export const saveBooking = (booking) => {
+    socket.emit('client:newbooking', booking);
 };
 
 export const onNewBooking = callback => {
@@ -39,12 +34,20 @@ export const updateBooking = (id, name, quantity, size, date) => {
     })
 };
 
-export const loadQtyOfBikes = callback => {
-    socket.on('server:loadqtyofbikes', callback);
-};
+// export const loadQtyOfBikes = callback => {
+//     socket.on('server:loadqtyofbikes', callback);
+// };
+
+export const loadBikeStock = callback => {
+    socket.on('server:stockbydate', callback);
+}
 
 export const updateFullStock = qtyToUpdate => {
     socket.emit('client:updatefullstock', qtyToUpdate);
+};
+
+export const dateSelected = date => {
+    socket.emit('client:dateselected', date);
 };
 
 socket.on('server:notenoughstock', () => {

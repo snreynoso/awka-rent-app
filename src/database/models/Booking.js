@@ -5,12 +5,16 @@ const schema = new Schema({
         type: String,
         required: true
     },
-    quantity: {
+    smallQty: {
         type: Number,
         required: true
     },
-    size: {
-        type: String,
+    mediumQty: {
+        type: Number,
+        required: true
+    },
+    largeQty: {
+        type: Number,
         required: true
     },
     date: {
