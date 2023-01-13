@@ -1,7 +1,11 @@
 const socket = io();
 
-export const loadBookings = callback => {
-    socket.on('server:loadbookings', callback);
+export const loadBooking = callback => {
+    socket.on('server:bookingdata', callback);
+};
+
+export const loadFullStock = callback => {
+    socket.on('server:bikedata', callback);
 };
 
 export const saveBooking = (booking) => {
@@ -24,23 +28,9 @@ export const onSelected = callback => {
     socket.on('server:selectedbooking', callback);
 };
 
-export const updateBooking = (id, name, quantity, size, date) => {
-    socket.emit('client:updatebooking', {
-        _id: id,
-        name,
-        quantity,
-        size,
-        date
-    })
+export const updateBooking = (newBooking) => {
+    socket.emit('client:updatebooking', newBooking)
 };
-
-// export const loadQtyOfBikes = callback => {
-//     socket.on('server:loadqtyofbikes', callback);
-// };
-
-export const loadBikeStock = callback => {
-    socket.on('server:stockbydate', callback);
-}
 
 export const updateFullStock = qtyToUpdate => {
     socket.emit('client:updatefullstock', qtyToUpdate);
@@ -50,7 +40,26 @@ export const dateSelected = date => {
     socket.emit('client:dateselected', date);
 };
 
+export const loadStockByDate = callback => {
+    socket.on('server:stockbydate', callback);
+}
+
 socket.on('server:notenoughstock', () => {
     console.log('NOT ENOUGH BIKES TO RENT!');
     alert('NOT ENOUGH BIKES TO RENT!');
+});
+
+socket.on('server:newbookingsaved', () => {
+    console.log('Booking saved Ok!');
+    alert('Booking saved Ok!')
+})
+
+socket.on('server:newbookingfailed', () => {
+    console.log('New booking failed!');
+    alert('New booking failed!')
+})
+
+socket.on('server:bookingdeleted', (name) => {
+    console.log(`${name}'s booking deleted!`);
+    alert(`${name}'s booking deleted!`)
 });

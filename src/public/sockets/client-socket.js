@@ -1,7 +1,7 @@
-import { loadBikeStock, onNewBooking } from './sockets.js';
-import { renderQtyOfBikes, onHandleSubmit, updateStock, onDateSelect } from '../utils/client-ui.js';
+import { loadStockByDate, onNewBooking } from './sockets.js';
+import { renderStockByDate, onHandleSubmit, updateStock, onDateSelect } from '../utils/client-ui.js';
 
-loadBikeStock(renderQtyOfBikes);
+loadStockByDate(renderStockByDate);
 onNewBooking(updateStock);
 
 const bookingForm = document.querySelector('#bookingForm');

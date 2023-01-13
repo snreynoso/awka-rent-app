@@ -6,14 +6,14 @@ const mediumQty = document.querySelector('#m-qty');
 const largeQty  = document.querySelector('#l-qty');
 const date      = document.querySelector('#date');
 
-export const renderQtyOfBikes = qtyOfBikes => {
-    const qtySmallInput  = document.querySelector('#s-qty-addon');
-    const qtyMediumInput = document.querySelector('#m-qty-addon');
-    const qtyLargeInput  = document.querySelector('#l-qty-addon');
+const smallQtyAddon  = document.querySelector('#s-qty-addon');
+const mediumQtyAddon = document.querySelector('#m-qty-addon');
+const largeQtyAddon  = document.querySelector('#l-qty-addon');
 
-    qtySmallInput.innerHTML  = `${qtyOfBikes.smallStock} available SMALL Size`;
-    qtyMediumInput.innerHTML = `${qtyOfBikes.mediumStock} available MEDIUM Size`;
-    qtyLargeInput.innerHTML  = `${qtyOfBikes.largeStock} available LARGE Size`;
+export const renderStockByDate = qtyOfBikes => {
+    smallQtyAddon.innerHTML  = `${qtyOfBikes.smallStock} available SMALL Size`;
+    mediumQtyAddon.innerHTML = `${qtyOfBikes.mediumStock} available MEDIUM Size`;
+    largeQtyAddon.innerHTML  = `${qtyOfBikes.largeStock} available LARGE Size`;
 };
 
 export const onHandleSubmit = event => {
@@ -30,10 +30,14 @@ export const onHandleSubmit = event => {
     saveBooking(booking);
 
     name.value      = '';
-    smallQty.value  = '';
-    mediumQty.value = '';
-    largeQty.value  = '';
+    smallQty.value  = 0;
+    mediumQty.value = 0;
+    largeQty.value  = 0;
     date.value      = '';
+
+    smallQtyAddon.innerHTML  = '-- available SMALL Size';
+    mediumQtyAddon.innerHTML = '-- available MEDIUM Size';
+    largeQtyAddon.innerHTML  = '-- available LARGE Size';
 };
 
 // TODO Actualizar

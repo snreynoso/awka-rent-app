@@ -94,8 +94,6 @@ const updateUser = async (req, res) => {
 
     const updatedUser = await User.findOneAndUpdate(filter, update, { new: true }).select('name');
 
-    console.log(updatedUser)
-
     return res.status(200).json({
         status: 200,
         msg: `User ${updatedUser.name} updated!`

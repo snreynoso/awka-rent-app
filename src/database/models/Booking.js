@@ -7,15 +7,15 @@ const schema = new Schema({
     },
     smallQty: {
         type: Number,
-        required: true
+        required: true,
     },
     mediumQty: {
         type: Number,
-        required: true
+        required: true,
     },
     largeQty: {
         type: Number,
-        required: true
+        required: true,
     },
     date: {
         type: Date,

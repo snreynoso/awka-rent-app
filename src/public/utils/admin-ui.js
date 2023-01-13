@@ -1,10 +1,33 @@
-import { deleteBooking, getBookingById, saveBooking, updateBooking, updateFullStock } from '../sockets/sockets.js';
+import { 
+    deleteBooking, 
+    getBookingById, 
+    saveBooking, 
+    updateBooking, 
+    updateFullStock,
+    dateSelected 
+} from '../sockets/sockets.js';
 
-const bookingsList = document.querySelector('#bookings');
 const name = document.querySelector('#name');
+const date = document.querySelector('#date');
+
+const bookingList = document.querySelector('#booking');
+
+const addonSmallFullStock  = document.querySelector('#fs-addon2');
+const addonMediumFullStock = document.querySelector('#fm-addon2');
+const addonLargeFullStock  = document.querySelector('#fl-addon2');
+
+const inputSmallFullStock  = document.querySelector('#smallFullStock');
+const inputMediumFullStock = document.querySelector('#mediumFullStock');
+const inputLargeFullStock  = document.querySelector('#largeFullStock');
+
+const smallQty  = document.querySelector('#s-qty');
+const mediumQty = document.querySelector('#m-qty');
+const largeQty  = document.querySelector('#l-qty');
+
+// Delete
 const quantity = document.querySelector('#quantity');
 const size = document.querySelector('#size');
-const date = document.querySelector('#date');
+// Delete
 
 let saveId = '';
 
@@ -20,11 +43,7 @@ const bookingUI = booking => {
             </div>
             
             <div class="col-md-2">
-                <p>Qty: ${booking.quantity}</p>
-            </div>
-
-            <div class="col-md-2">
-                <p>Size: ${booking.size}</p>
+                <p>S: ${booking.smallQty},  M: ${booking.mediumQty},  L: ${booking.largeQty}</p>
             </div>
             
             <div class="col-md-3">
@@ -49,49 +68,98 @@ const bookingUI = booking => {
     return div;
 };
 
-export const renderBookings = ({ bookings, avlStock, fullStock }) => {
-    const avlStockInput = document.querySelector('#basic-addon2');
-    avlStockInput.innerHTML = `of ${avlStock} available`;
+export const renderBooking = (bookingData) => {
+    bookingList.innerHTML = '';
+    bookingData.forEach(booking => bookingList.append(bookingUI(booking)));
+};
 
-    const fullStockInput = document.querySelector('#fullStock');
-    fullStockInput.value = fullStock;
+export const renderFullStock = (bikeData) => {
+    addonSmallFullStock.innerHTML  = `Full Stock of Small: ${bikeData.smallFullStock}`;
+    addonMediumFullStock.innerHTML = `Full Stock of Medium: ${bikeData.mediumFullStock}`;
+    addonLargeFullStock.innerHTML  = `Full Stock of Large: ${bikeData.largeFullStock}`;
 
-    bookingsList.innerHTML = '';
-    bookings.forEach(booking => bookingsList.append(bookingUI(booking)));
+    inputSmallFullStock.value  = bikeData.smallFullStock;
+    inputMediumFullStock.value = bikeData.mediumFullStock;
+    inputLargeFullStock.value  = bikeData.largeFullStock;
 };
 
 export const onHandleSubmit = event => {
     event.preventDefault();
 
     if (saveId) {
-        updateBooking(saveId, name.value, quantity.value, size.value, date.value.slice(0, 10));
+        const newBooking = {
+            _id: saveId, 
+            name: name.value, 
+            smallQty: smallQty.value, 
+            mediumQty: mediumQty.value, 
+            largeQty: largeQty.value , 
+            date: date.value.slice(0, 10)
+        }
+
+        updateBooking(newBooking);
     } else {
-        saveBooking(name.value, quantity.value, size.value, date.value);
+        const booking = {
+            name: name.value, 
+            smallQty: smallQty.value, 
+            mediumQty: mediumQty.value, 
+            largeQty: largeQty.value, 
+            date: date.value
+        };
+       
+        saveBooking(booking);
     }
 
-    name.value     = '';
-    quantity.value = '';
-    size.value     = '';
-    date.value     = '';
-    saveId         = '';
+    name.value      = '';
+    smallQty.value  = '';
+    mediumQty.value = '';
+    largeQty.value  = '';
+    date.value      = '';
+    saveId          = '';
 };
 
 export const fillForm = booking => {
+    
     name.value     = booking.name;
-    quantity.value = booking.quantity;
-    size.value     = booking.size;
+    smallQty.value = booking.smallQty;
+    mediumQty.value= booking.mediumQty;
+    largeQty.value = booking.largeQty;
     date.value     = booking.date.slice(0, 10);
     saveId         = booking._id;
 };
 
 export const appendBooking = data => {
-    const qtyInput = document.querySelector('#basic-addon2');
-    qtyInput.innerHTML = `of ${data.avlStock} available`;
 
-    bookingsList.append(bookingUI(data.savedBooking, data.avlStock));
+    console.log(data.saveBooking)
+
+    // bookingsList.append(bookingUI(data.savedBooking, data.avlStock));
 };
 
-export const onHandleFullStockUpdate = event => {
-    const qtyToUpdate = document.querySelector('#fullStock').value;
+export const onHandleFullStockUpdate = (event) => {
+    event.preventDefault();
+
+    // const smallUpdate  = document.querySelector('#smallFullStock').value;
+    // const mediumUpdate = document.querySelector('#mediumFullStock').value;
+    // const largeUpdate  = document.querySelector('#largeFullStock').value;
+
+    const qtyToUpdate = {
+        smallUpdate:  inputSmallFullStock.value, 
+        mediumUpdate: inputMediumFullStock.value,
+        largeUpdate:  inputLargeFullStock.value 
+    }
+
     updateFullStock(qtyToUpdate);
+}
+
+export const renderStockByDate = qtyOfBikes => {
+    const qtySmallInput  = document.querySelector('#s-qty-addon');
+    const qtyMediumInput = document.querySelector('#m-qty-addon');
+    const qtyLargeInput  = document.querySelector('#l-qty-addon');
+
+    qtySmallInput.innerHTML  = `${qtyOfBikes.smallStock} available SMALL Size`;
+    qtyMediumInput.innerHTML = `${qtyOfBikes.mediumStock} available MEDIUM Size`;
+    qtyLargeInput.innerHTML  = `${qtyOfBikes.largeStock} available LARGE Size`;
+};
+
+export const onDateSelect = () => {
+    dateSelected(date.value); 
 }

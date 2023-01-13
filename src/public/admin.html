@@ -15,72 +15,83 @@
 <body>
     <div class="container d-flex justify-content-between align-items-center">
         <p class="col-md-8 fs-3 text-center">ADMIN PANEL</p>
-    
+
         <div class="col-md-4 d-flex justify-content-end">
-            <a class="btn btn-outline-success mx-1" href="./users.html" id="btnEditUsers" style="display: none;">Edit Users</a>
+            <a class="btn btn-outline-success mx-1" href="./users.html" id="btnEditUsers" style="display: none;">Edit
+                Users</a>
             <a class="btn btn-outline-primary" href="/">Home</a>
         </div>
-        
     </div>
 
-    <div class="container  rounded-1 border p-3">
-        <p class="fs-3">Create / Edit</p>
+    <div class="container rounded-1 border p-3">
+        <p class="fs-3">Create / Edit Booking</p>
 
-        <form id="bookingForm" class="row g-3 align-items-center rounded-2 border p-3">
-            <div class="col-md-3">
-                <div class="col-auto">
-                    <label for="name" class="col-form-label">Name</label>
+        <form id="bookingForm">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-8">
+                    <div class="col-auto">
+                        <label for="name" class="col-form-label">Name</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" id="name" class="form-control">
+                    </div>
                 </div>
-                <div class="col-auto">
-                    <input type="text" id="name" class="form-control">
+
+                <div class="col-md-4">
+                    <div class="col-auto">
+                        <label for="date" class="col-form-label">Date</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="date" id="date" class="form-control">
+                    </div>
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <div class="col-auto">
-                    <label for="avlStock" class="col-form-label">Qty</label>
-                </div>
-
-                <div class="col-auto input-group">
-                    <input type="number" id="quantity" value="1" min="1" max="10" class="form-control">
-                    <span class="input-group-text" id="basic-addon2">of -- available</span>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="col-auto">
-                    <label for="size" class="col-form-label">Size</label>
-                </div>
-
-                <div class="col-auto">
-                    <select id="size" class="form-select">
-                        <option selected>Choose...</option>
-                        <option value="Small">Small</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Large">Large</option>
-                    </select>
+            <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <div class="col-auto">
+                        <label class="col-form-label">Quantity</label>
+                    </div>
+                    <div class="col-auto input-group mt-1">
+                        <input type="number" id="s-qty" value="0" min="0" max="10" class="form-control">
+                        <span class="input-group-text" id="s-qty-addon">-- available SMALL Size</span>
+                    </div>
+                    <div class="col-auto input-group mt-1">
+                        <input type="number" id="m-qty" value="0" min="0" max="10" class="form-control">
+                        <span class="input-group-text" id="m-qty-addon">-- available MEDIUM Size</span>
+                    </div>
+                    <div class="col-auto input-group mt-1">
+                        <input type="number" id="l-qty" value="0" min="0" max="10" class="form-control">
+                        <span class="input-group-text" id="l-qty-addon">-- available LARGE Size</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-md-5">
-                <div class="col-auto">
-                    <label for="date" class="col-form-label">Date</label>
-                </div>
-                <div class="col-auto">
-                    <input type="date" id="date" class="form-control">
-                </div>
-            </div>
-
-            <div class="col-md-auto align-self-end">
+            <div class="col-md-auto mt-3">
                 <button class="btn btn-outline-success">Send</button>
             </div>
         </form>
 
         <div class="row g-3 align-items-center mt-2 rounded-2 border p-3">
+            <p class="fs-3">Update Full Stock of Bikes</p>
             <div class="col-lg-3">
                 <div class="col-auto input-group">
-                    <input type="number" id="fullStock" value="1" min="1" max="50" class="form-control">
-                    <span class="input-group-text" id="basic-addon2">Full Stock of Bikes</span>
+                    <input type="number" id="smallFullStock" min="1" max="50" class="form-control">
+                    <span class="input-group-text" id="fs-addon2">Full Stock of Small</span>
+                </div>
+            </div>
+            
+            <div class="col-lg-3">
+                <div class="col-auto input-group">
+                    <input type="number" id="mediumFullStock" min="1" max="50" class="form-control">
+                    <span class="input-group-text" id="fm-addon2">Full Stock of Medium</span>
+                </div>
+            </div>
+            
+            <div class="col-lg-3">
+                <div class="col-auto input-group">
+                    <input type="number" id="largeFullStock" min="1" max="50" class="form-control">
+                    <span class="input-group-text" id="fl-addon2">Full Stock of Large</span>
                 </div>
             </div>
 
@@ -92,7 +103,7 @@
 
     <div class="container rounded-1 border p-3 mt-3">
         <p class="fs-3">Booking List</p>
-        <div id="bookings"></div>
+        <div id="booking"></div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
