@@ -6,5 +6,8 @@ export function urlSelector(url_path) {
     ? `http://localhost:3000${url_path}`
     : `${URL_APP}${url_path}`;
 
+
+  // let url = `${URL_APP}${url_path}`;
+  
   return url;
 };

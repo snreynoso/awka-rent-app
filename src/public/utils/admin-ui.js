@@ -110,9 +110,9 @@ export const onHandleSubmit = event => {
     }
 
     name.value      = '';
-    smallQty.value  = '';
-    mediumQty.value = '';
-    largeQty.value  = '';
+    smallQty.value  = 0;
+    mediumQty.value = 0;
+    largeQty.value  = 0;
     date.value      = '';
     saveId          = '';
 };
